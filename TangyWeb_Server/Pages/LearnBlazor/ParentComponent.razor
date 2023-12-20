@@ -1,0 +1,37 @@
+﻿@page "/learnblazor/parentcomponent"
+
+<h3>Parent Child Relation</h3>
+
+<CascadingValue Value="@MessageForGrandChild" Name="message">
+    <CascadingValue Value="@Number" Name="number">
+        <_ChildComponent @ref="childComp" Title="First Child" Clicked="ShowMessage">
+            <ChildContent>
+                Render Fragment From Parent!
+            </ChildContent>
+            <DangerChildContent>
+                Danger Child Content
+            </DangerChildContent>
+        </_ChildComponent>
+    </CascadingValue>
+</CascadingValue>
+
+<p>@message</p>
+<_AnotherChildComponent placeholder="Placeholder from Parent"></_AnotherChildComponent>
+
+<div class="row">
+    <button class="btn btn-success m-2"style="width:200px" @onclick="() => childComp.ToastrSuccess()">Show SweetAlert</button>
+</div>
+
+@code {
+    public string message = "";
+
+    private void ShowMessage()
+    {
+        message = "Button Clicked!";
+    }
+
+    public string MessageForGrandChild = "This message is from your grand parent (ParentComponent)";
+    public string Number = "9";
+
+    private _ChildComponent childComp;
+}

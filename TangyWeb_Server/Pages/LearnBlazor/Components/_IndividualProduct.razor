@@ -1,0 +1,41 @@
+﻿<div class="m-1 col-5 border bg-light" @onclick="args => Selected(args, Product.Name)" id="@Product.Name">
+    <h4 class="text-secondary">Product - @Product.Id</h4>
+    <input type="checkbox" @onchange="FavoriteCount" /> Add to Favorite
+    <br />
+    <br />
+    Name - @Product.Name
+    <p>RF from Parent - @FirstFragment @SecondFragment</p>
+    Show Properties <input type="checkbox" @bind="Product.IsActive" />
+    @if (Product.IsActive)
+    {
+        @foreach (Demo_ProductProp property in Product.ProductProperties)
+        {
+            <p>@property.Key - @property.Value</p>
+        }
+    }
+    <br />
+    <_EditDeleteButton IsActive="Product.IsActive"></_EditDeleteButton>
+</div>
+
+@code {
+    [Parameter]
+    public Demo_Product Product { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnFavoriteSelection { get; set; }
+    [Parameter]
+    public EventCallback<string> OnSelected { get; set; }
+    [Parameter]
+    public RenderFragment FirstFragment { get; set; }
+    [Parameter]
+    public RenderFragment SecondFragment { get; set; }
+
+    private async Task FavoriteCount(ChangeEventArgs e)
+    {
+        await OnFavoriteSelection.InvokeAsync((bool)e.Value);
+    }
+
+    private async Task Selected(MouseEventArgs e, string name)
+    {
+        await OnSelected.InvokeAsync(name);
+    }
+}
